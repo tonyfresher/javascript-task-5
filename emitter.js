@@ -42,14 +42,18 @@ function getEmitter() {
          * @returns {Emitter}
          */
         off: function (event, context) {
-            let subevents = Object.keys(this._subscriptions).filter(e => e.startsWith(`${event}.`));
+            let subevents = Object.keys(this._subscriptions).filter(
+                subscribtion => subscribtion.startsWith(`${event}.`)
+            );
             let unsubscribed = [event].concat(subevents);
 
-            unsubscribed.forEach(item => {
-                this._subscriptions[item] = this._subscriptions[item].filter(
-                    subscription => subscription.context !== context
-                );
-            });
+            unsubscribed
+                .filter(item => this._subscriptions[item])
+                .forEach(item => {
+                    this._subscriptions[item] = this._subscriptions[item].filter(
+                        subscription => subscription.context !== context
+                    );
+                });
 
             return this;
         },
